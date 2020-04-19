@@ -1,5 +1,5 @@
 
-
+// 任务队列，最多并发10个请求，如果请求数多就hold住，执行完成一个任务之后，后续任务进入队列执行
 // taskList 任务队列
 // count 当前进程中的任务数量
 // limit 限制最大任务数量
@@ -13,7 +13,8 @@ function TaskLimit (limit) {
 
 TaskLimit.prototype.scanning = function(fn) {
     const { limit , count } = this;
-    if (limit >= count) {
+    console.log('count', count)
+    if (limit <= count) {
         return this.hold(fn);
     } else {
         return this.run(fn);
@@ -31,7 +32,7 @@ TaskLimit.prototype.run = function(func) {
 
 TaskLimit.prototype.hold = function(func) {
     return new Promise((resolve, reject) => {
-        this.taskList.push(func, resolve, reject)
+        this.taskList.push({ func, resolve, reject })
     })
 }
 
@@ -48,8 +49,9 @@ const list = Array.from({ length: 100 }).map(
     (item, index) => () => new Promise((resolve) => {
     console.log('list '+ index +' go')
     setTimeout(() => {
+        console.log('object', 'list ' + index + ' done!!!!!!!!!!!!!')
         resolve('list '+ index +' done')
-    }, (index + 1))
+    }, Math.random() * 1000)
 }))
 
 Promise.map = function(list, limit = 10) {
