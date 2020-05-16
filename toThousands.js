@@ -38,3 +38,8 @@ function toThousands2(num) {
 }
 
 console.log(toThousands2(12345678.90567890));
+
+const str = (12345678.90567890).toString()
+
+const temp = str.match(/(\d)(?=(\d{3})+\.)/g)
+console.log('temp', temp)
