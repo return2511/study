@@ -10,7 +10,8 @@ function TaskLimit (limit) {
 }
 
 // scanning 队列扫描
-
+// run: 去执行队列
+// hold: promise推入暂存队列
 TaskLimit.prototype.scanning = function(fn) {
     const { limit , count } = this;
     console.log('count', count)
